@@ -790,18 +790,6 @@ export default function ImageGenerator() {
 
                                             {image.status === 'completed' && image.imageUrl && (
                                                 <div className="relative w-full">
-                                                    <div className="relative w-full aspect-auto">
-                                                        <Image
-                                                            src={image.imageUrl}
-                                                            alt={image.prompt}
-                                                            width={1024}
-                                                            height={1024}
-                                                            className="w-full h-auto"
-                                                            unoptimized
-                                                            priority={!image.parentId}
-                                                        />
-                                                    </div>
-                                                    {image.type && (
                                                     <img
                                                         src={image.imageUrl}
                                                         alt={image.prompt}
