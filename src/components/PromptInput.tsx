@@ -11,7 +11,37 @@ interface PromptInputProps {
 export function PromptInput({ onSubmit, disabled }: PromptInputProps) {
     const [prompt, setPrompt] = useState('');
     const [showSettings, setShowSettings] = useState(false);
-    const [settings, setSettings] = useState<ImageSettings | null>(null);
+    const [settings, setSettings] = useState<ImageSettings>({
+        size: {
+            mode: 'Landscape',
+            aspectRatio: '2:1',
+        },
+        aesthetics: {
+            stylization: 100,
+            weirdness: 30,
+            variety: 100,
+        },
+        model: {
+            mode: 'Standard',
+            version: '6.1',
+            personalize: false,
+        },
+        speed: 'Fast',
+    });
+
+    const handleSubmit = () => {
+        if (prompt.trim()) {
+            onSubmit(prompt, settings);
+            setPrompt('');
+        }
+    };
+
+    const handleKeyPress = (e: React.KeyboardEvent) => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            handleSubmit();
+        }
+    };
 
     return (
         <div className="w-full">
@@ -27,6 +57,7 @@ export function PromptInput({ onSubmit, disabled }: PromptInputProps) {
                             type="text"
                             value={prompt}
                             onChange={(e) => setPrompt(e.target.value)}
+                            onKeyPress={handleKeyPress}
                             placeholder="What will you imagine?"
                             className="w-full px-3 py-3 bg-transparent text-white placeholder-gray-400 focus:outline-none"
                             disabled={disabled}
