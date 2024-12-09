@@ -4,7 +4,6 @@ import { useState, ChangeEvent, useEffect, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Loader2 } from 'lucide-react';
-import { SailboatLoader } from "./SailboatLoader";
 
 type ImageStatus = 'pending' | 'completed' | 'failed';
 
@@ -425,42 +424,6 @@ export default function ImageGenerator() {
 
     return (
         <div className="w-full max-w-4xl mx-auto space-y-8">
-            <div className="text-center space-y-2">
-                <div className="flex items-center justify-center gap-3">
-                    <svg
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        className="w-8 h-8 text-indigo-400"
-                    >
-                        <path
-                            d="M12 12L12 3M12 3L9 6M12 3L15 6"
-                            strokeWidth={1.5}
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                        />
-                        <path
-                            d="M3 13.5L7 9.5L12 12L17 9.5L21 13.5"
-                            strokeWidth={1.5}
-                            strokeLinecap="round"
-                        />
-                        <path
-                            d="M3 15L21 15"
-                            strokeWidth={1.5}
-                            strokeLinecap="round"
-                            className="text-indigo-300/50"
-                        />
-                        <path
-                            d="M4 15C4 15 5 19 12 19C19 19 20 15 20 15"
-                            strokeWidth={1.5}
-                            strokeLinecap="round"
-                            className="text-indigo-300/30"
-                        />
-                    </svg>
-                    <h1 className="text-2xl font-bold text-white">AI Image Generator</h1>
-                </div>
-                <p className="text-gray-400">Transform your ideas into stunning visuals with our advanced AI</p>
-            </div>
             <div className="relative group">
                 <div className="flex flex-col gap-3">
                     <div className="flex gap-3 p-1 bg-gray-900/50 backdrop-blur-xl rounded-2xl border border-gray-800/50 shadow-xl transition-all duration-300 group-hover:border-gray-700/50">
@@ -468,7 +431,7 @@ export default function ImageGenerator() {
                             <input
                                 value={prompt.replace(/\s+--(?:ar|s)\s+[^\s]+/g, '')}
                                 onChange={handlePromptChange}
-                                placeholder="Transform your ideas into stunning visuals..."
+                                placeholder="Describe your imagination..."
                                 className="min-w-0 flex-1 bg-transparent border-0 text-lg text-gray-100 placeholder:text-gray-500/70 focus:ring-0 focus:outline-none font-medium tracking-wide"
                                 disabled={isGenerating}
                                 spellCheck={false}
@@ -710,15 +673,15 @@ export default function ImageGenerator() {
                                             {image.status === 'pending' && (
                                                 <div className="absolute inset-0 flex flex-col items-center justify-center p-8 bg-gray-800/30">
                                                     <div className="text-center space-y-6 max-w-[300px]">
-                                                        <div className="relative flex justify-center">
-                                                            <SailboatLoader size="lg" />
+                                                        <div className="relative">
+                                                            <Loader2 className="h-10 w-10 animate-spin text-indigo-500" />
                                                             <div className="absolute -bottom-2 -right-2">
                                                                 <div className="animate-pulse w-3 h-3 bg-indigo-500 rounded-full" />
                                                             </div>
                                                         </div>
                                                         <div className="space-y-3">
                                                             <p className="text-base font-medium text-gray-300">
-                                                                {(image.progress ?? 0) >= 100 ? 'Almost there...' : 'Setting sail with your creation...'}
+                                                                {(image.progress ?? 0) >= 100 ? 'Almost there...' : 'Creating your masterpiece...'}
                                                             </p>
                                                             <div className="w-full max-w-[200px] mx-auto">
                                                                 <div className="relative h-2.5 bg-gray-700/50 rounded-full overflow-hidden">
@@ -742,7 +705,7 @@ export default function ImageGenerator() {
                                                                     )}
                                                                 </div>
                                                                 <p className="text-sm text-gray-400 mt-3 font-medium">
-                                                                    {Math.round(image.progress ?? 0)}% of your creation complete
+                                                                    {Math.round(image.progress ?? 0)}% complete
                                                                 </p>
                                                             </div>
                                                         </div>
@@ -804,7 +767,7 @@ export default function ImageGenerator() {
                                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                                                         </svg>
                                                         <p className="text-sm font-medium text-red-400 mb-2">
-                                                            Generation Failed - Please try again
+                                                            Generation Failed
                                                         </p>
                                                         {image.error && (
                                                             <p className="text-xs text-red-300/80">
