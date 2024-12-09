@@ -22,6 +22,9 @@ export interface ImageSettings {
     speed: 'Relax' | 'Fast' | 'Turbo';
 }
 
+// Add this type definition near the top of the file, after the interfaces
+type SettingValue = string | number | boolean;
+
 export function Settings({ onSettingsChange }: SettingsProps) {
     const [settings, setSettings] = useState<ImageSettings>({
         size: {
@@ -41,16 +44,16 @@ export function Settings({ onSettingsChange }: SettingsProps) {
         speed: 'Fast',
     });
 
-    const handleSettingChange = (category: string, setting: string, value: any) => {
+    const handleSettingChange = (category: string, setting: string, value: SettingValue) => {
         if (category === 'speed') {
             // Handle speed separately since it's not nested
             setSettings({
                 ...settings,
-                speed: value
+                speed: value as ImageSettings['speed']
             });
             onSettingsChange({
                 ...settings,
-                speed: value
+                speed: value as ImageSettings['speed']
             });
             return;
         }
@@ -59,10 +62,10 @@ export function Settings({ onSettingsChange }: SettingsProps) {
         const newSettings = {
             ...settings,
             [category]: {
-                ...settings[category as keyof typeof settings],
+                ...settings[category as keyof ImageSettings],
                 [setting]: value,
             },
-        };
+        } as ImageSettings;  // Add type assertion here
         setSettings(newSettings);
         onSettingsChange(newSettings);
     };

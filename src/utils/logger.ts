@@ -1,5 +1,7 @@
 type LogType = 'info' | 'success' | 'error' | 'warning' | 'api';
 
+type LogArg = string | number | boolean | null | undefined | object;
+
 const getLogStyle = (type: LogType): string => {
     const styles = {
         info: 'color: #3498db; font-weight: bold;',
@@ -12,19 +14,19 @@ const getLogStyle = (type: LogType): string => {
 };
 
 export const logger = {
-    info: (title: string, ...args: any[]) => {
+    info: (title: string, ...args: LogArg[]) => {
         console.log(`%c[INFO] ${title}`, getLogStyle('info'), ...args);
     },
-    success: (title: string, ...args: any[]) => {
+    success: (title: string, ...args: LogArg[]) => {
         console.log(`%c[SUCCESS] ${title}`, getLogStyle('success'), ...args);
     },
-    error: (title: string, ...args: any[]) => {
+    error: (title: string, ...args: LogArg[]) => {
         console.log(`%c[ERROR] ${title}`, getLogStyle('error'), ...args);
     },
-    warning: (title: string, ...args: any[]) => {
+    warning: (title: string, ...args: LogArg[]) => {
         console.log(`%c[WARNING] ${title}`, getLogStyle('warning'), ...args);
     },
-    api: (method: string, endpoint: string, data?: any) => {
+    api: (method: string, endpoint: string, data?: Record<string, unknown>) => {
         console.group(`%c[API] ${method} ${endpoint}`, getLogStyle('api'));
         if (data) {
             console.log('Data:', data);
