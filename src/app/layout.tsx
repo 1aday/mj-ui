@@ -12,12 +12,15 @@ export const metadata: Metadata = {
     title: "Midjourney Easy UI",
     description: "Imagine creating stunning images 🎨 No Discord, no commands - Just effortless art!",
     type: "website",
+    siteName: "Midjourney Easy UI",
+    locale: "en_US",
     images: [
       {
-        url: "/og-image.jpg",
+        url: "/easyui.jpg",
         width: 1200,
         height: 630,
-        alt: "Midjourney Easy UI",
+        alt: "Midjourney Easy UI - AI Image Generation Made Simple",
+        type: "image/jpeg",
       },
     ],
   },
@@ -25,9 +28,16 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Midjourney Easy UI",
     description: "Imagine creating stunning images 🎨 No Discord, no commands - Just effortless art!",
+    images: ["/easyui.jpg"],
+    creator: "@yourtwitterhandle",
   },
   icons: {
     icon: "/favicon.ico",
+    apple: "/apple-touch-icon.png",
+  },
+  viewport: {
+    width: "device-width",
+    initialScale: 1,
   },
 };
 
