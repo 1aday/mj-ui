@@ -46,26 +46,24 @@ export function Settings({ onSettingsChange }: SettingsProps) {
 
     const handleSettingChange = (category: string, setting: string, value: SettingValue) => {
         if (category === 'speed') {
-            // Handle speed separately since it's not nested
-            setSettings({
+            const newSettings = {
                 ...settings,
                 speed: value as ImageSettings['speed']
-            });
-            onSettingsChange({
-                ...settings,
-                speed: value as ImageSettings['speed']
-            });
+            };
+            setSettings(newSettings);
+            onSettingsChange(newSettings);
             return;
         }
 
         // Handle nested settings
+        const categorySettings = settings[category as keyof ImageSettings] as Record<string, SettingValue>;
         const newSettings = {
             ...settings,
             [category]: {
-                ...settings[category as keyof ImageSettings],
+                ...categorySettings,
                 [setting]: value,
             },
-        } as ImageSettings;  // Add type assertion here
+        };
         setSettings(newSettings);
         onSettingsChange(newSettings);
     };

@@ -322,7 +322,7 @@ export default function ImageGenerator() {
             }
         } catch (error) {
             console.error('Upscale error:', error);
-            setError(error instanceof Error ? error.message : 'Failed to upscale image');
+            handleError(imageId, error instanceof Error ? error.message : 'Failed to upscale image');
         } finally {
             setActionLoadingStates(prev => ({ ...prev, [`upscale-${imageId}-${choice}`]: false }));
         }
@@ -384,7 +384,7 @@ export default function ImageGenerator() {
             }
         } catch (error) {
             console.error('Variation error:', error);
-            setError(error instanceof Error ? error.message : 'Failed to create variation');
+            handleError(imageId, error instanceof Error ? error.message : 'Failed to create variation');
         } finally {
             setActionLoadingStates(prev => ({ ...prev, [`variation-${imageId}-${choice}`]: false }));
         }
