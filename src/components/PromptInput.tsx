@@ -13,13 +13,6 @@ export function PromptInput({ onSubmit, disabled }: PromptInputProps) {
     const [showSettings, setShowSettings] = useState(false);
     const [settings, setSettings] = useState<ImageSettings | null>(null);
 
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
-        if (prompt.trim() && settings) {
-            onSubmit(prompt, settings);
-        }
-    };
-
     return (
         <div className="w-full">
             <div className="relative bg-gray-900 rounded-xl p-1">
@@ -41,8 +34,7 @@ export function PromptInput({ onSubmit, disabled }: PromptInputProps) {
                         <button
                             type="button"
                             onClick={() => setShowSettings(!showSettings)}
-                            className={`px-3 py-2 mr-1 rounded-lg transition-colors ${showSettings ? 'bg-gray-700 text-red-500' : 'text-gray-400 hover:bg-gray-700/50'
-                                }`}
+                            className={`px-3 py-2 mr-1 rounded-lg transition-colors ${showSettings ? 'bg-gray-700 text-red-500' : 'text-gray-400 hover:bg-gray-700/50'}`}
                         >
                             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
