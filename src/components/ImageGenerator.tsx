@@ -2,13 +2,9 @@
 
 import { useState, ChangeEvent, useEffect, useRef } from 'react';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { Card } from '@/components/ui/card';
 import { Loader2 } from 'lucide-react';
-import { Progress } from '@/components/ui/progress';
-import Image from 'next/image';
 
-type ApiStatus = 'sent' | 'waiting' | 'progress' | 'done' | 'error' | 'queued';
 type ImageStatus = 'pending' | 'completed' | 'failed';
 
 interface GeneratedImage {
@@ -27,7 +23,7 @@ interface GeneratedImage {
 
 interface ApiResponse {
     hash: string;
-    status: 'sent' | 'waiting' | 'progress' | 'done' | 'error';
+    status: 'sent' | 'waiting' | 'progress' | 'done' | 'error' | 'queued';
     progress?: number;
     result?: {
         url: string;
@@ -65,34 +61,27 @@ const parsePromptAndCommands = (fullPrompt: string): { basePrompt: string; comma
     return { basePrompt, commands };
 };
 
+// Add back the MAX_POLL_TIME constant
+const MAX_POLL_TIME = 60000; // 60 seconds
+
 export default function ImageGenerator() {
     const [prompt, setPrompt] = useState('');
     const [isGenerating, setIsGenerating] = useState(false);
     const [generatedImages, setGeneratedImages] = useState<GeneratedImage[]>([]);
     const [apiBaseUrl, setApiBaseUrl] = useState('/api');
     const pollingTimers = useRef<{ [key: string]: NodeJS.Timeout }>({});
-    const [error, setError] = useState<string | null>(null);
-    const pollInterval = useRef<NodeJS.Timeout | null>(null);
-    const MAX_POLL_TIME = 60000; // 60 seconds
     const pollStartTimes = useRef<{ [key: string]: number }>({});
     const [actionLoadingStates, setActionLoadingStates] = useState<{ [key: string]: boolean }>({});
     const requestQueue = useRef<Array<() => Promise<void>>>([]);
     const [isProcessingQueue, setIsProcessingQueue] = useState(false);
-    const [generationHistory, setGenerationHistory] = useState<{
-        successful: number;
-        failed: number;
-        totalTime: number;
-    }>({
-        successful: 0,
-        failed: 0,
-        totalTime: 0
-    });
     const progressTrackers = useRef<{ [key: string]: ProgressTracker }>({});
     const [showSettings, setShowSettings] = useState(false);
     const [aspectRatio, setAspectRatio] = useState<string>('');
     const [stylization, setStylization] = useState<number>(0);
-    const [styleReference, setStyleReference] = useState<string>(''); // Can be a number or 'random'
+    const [styleReference, setStyleReference] = useState<string>('');
     const [isRandomStyle, setIsRandomStyle] = useState(false);
+    // Add back error state
+    const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
         return () => {
@@ -107,20 +96,6 @@ export default function ImageGenerator() {
             setApiBaseUrl(`${protocol}//${host}/api`);
         }
     }, []);
-
-    const getPromptWithCommands = (basePrompt: string, ratio: string, style: number, sref: string) => {
-        let finalPrompt = basePrompt.replace(/\s+--(?:ar|s|sref)\s+[^\s]+/g, '').trim();
-        if (ratio) {
-            finalPrompt += ` --ar ${ratio}`;
-        }
-        if (style > 0) {
-            finalPrompt += ` --s ${style}`;
-        }
-        if (sref) {
-            finalPrompt += ` --sref ${sref}`;
-        }
-        return finalPrompt;
-    };
 
     const handlePromptChange = (e: ChangeEvent<HTMLInputElement>) => {
         const newPrompt = e.target.value;
@@ -270,11 +245,6 @@ export default function ImageGenerator() {
                             } : img
                         ));
                         clearPollingTimer(imageId);
-                        setGenerationHistory(prev => ({
-                            ...prev,
-                            successful: prev.successful + 1,
-                            totalTime: prev.totalTime + (Date.now() - pollStartTimes.current[imageId])
-                        }));
                     }
                     break;
 
@@ -420,41 +390,6 @@ export default function ImageGenerator() {
         }
     };
 
-    const handleReroll = async (imageId: string) => {
-        const image = generatedImages.find(img => img.id === imageId);
-        if (!image) return;
-
-        try {
-            // Re-generate with the same prompt
-            const response = await fetch(`${apiBaseUrl}/generate`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ prompt: image.prompt })
-            });
-            const data = await response.json();
-            if (data.hash) {
-                pollImageStatus(data.hash, Date.now().toString());
-            }
-        } catch (error) {
-            console.error('Reroll error:', error);
-        }
-    };
-
-    const processQueue = async () => {
-        if (isProcessingQueue || requestQueue.current.length === 0) return;
-
-        setIsProcessingQueue(true);
-
-        while (requestQueue.current.length > 0) {
-            const request = requestQueue.current.shift();
-            if (request) {
-                await request();
-            }
-        }
-
-        setIsProcessingQueue(false);
-    };
-
     const updateProgress = (imageId: string, progress: number) => {
         const now = Date.now();
         const tracker = progressTrackers.current[imageId] || {
@@ -469,11 +404,10 @@ export default function ImageGenerator() {
             attempts: tracker.attempts + 1
         };
 
-        // Update UI with progress immediately
         setGeneratedImages(prev => prev.map(img =>
             img.id === imageId ? {
                 ...img,
-                progress: Math.min(Math.round(progress), 100), // Ensure progress doesn't exceed 100
+                progress: Math.min(Math.round(progress), 100),
                 status: progress >= 100 ? 'completed' : 'pending'
             } : img
         ));
@@ -491,10 +425,7 @@ export default function ImageGenerator() {
             } : img
         ));
 
-        setGenerationHistory(prev => ({
-            ...prev,
-            failed: prev.failed + 1
-        }));
+        setError(errorMessage);
     };
 
     return (
