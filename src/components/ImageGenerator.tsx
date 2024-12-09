@@ -72,16 +72,12 @@ export default function ImageGenerator() {
     const pollingTimers = useRef<{ [key: string]: NodeJS.Timeout }>({});
     const pollStartTimes = useRef<{ [key: string]: number }>({});
     const [actionLoadingStates, setActionLoadingStates] = useState<{ [key: string]: boolean }>({});
-    const requestQueue = useRef<Array<() => Promise<void>>>([]);
-    const [isProcessingQueue, setIsProcessingQueue] = useState(false);
     const progressTrackers = useRef<{ [key: string]: ProgressTracker }>({});
     const [showSettings, setShowSettings] = useState(false);
     const [aspectRatio, setAspectRatio] = useState<string>('');
     const [stylization, setStylization] = useState<number>(0);
     const [styleReference, setStyleReference] = useState<string>('');
     const [isRandomStyle, setIsRandomStyle] = useState(false);
-    // Add back error state
-    const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
         return () => {
@@ -424,8 +420,6 @@ export default function ImageGenerator() {
                 error: errorMessage
             } : img
         ));
-
-        setError(errorMessage);
     };
 
     return (
