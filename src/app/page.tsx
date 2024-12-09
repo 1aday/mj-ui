@@ -9,11 +9,11 @@ export default function Home() {
         <div className="text-center mb-16 space-y-4">
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight">
             <span className="inline-block bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400">
-              AI Image Generator
+              Easy Midjourney UI
             </span>
           </h1>
           <p className="text-gray-400 text-lg sm:text-xl max-w-2xl mx-auto font-medium tracking-wide">
-            Transform your ideas into stunning visuals with our advanced AI
+            No Discord, no commands - Just effortless art!
           </p>
         </div>
         <ImageGenerator />

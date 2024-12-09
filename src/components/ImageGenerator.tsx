@@ -4,6 +4,7 @@ import { useState, ChangeEvent, useEffect, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Loader2 } from 'lucide-react';
+import { SailboatLoader } from "./SailboatLoader";
 
 type ImageStatus = 'pending' | 'completed' | 'failed';
 
@@ -425,7 +426,39 @@ export default function ImageGenerator() {
     return (
         <div className="w-full max-w-4xl mx-auto space-y-8">
             <div className="text-center space-y-2">
-                <h1 className="text-2xl font-bold text-white">AI Image Generator</h1>
+                <div className="flex items-center justify-center gap-3">
+                    <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        className="w-8 h-8 text-indigo-400"
+                    >
+                        <path
+                            d="M12 12L12 3M12 3L9 6M12 3L15 6"
+                            strokeWidth={1.5}
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                        />
+                        <path
+                            d="M3 13.5L7 9.5L12 12L17 9.5L21 13.5"
+                            strokeWidth={1.5}
+                            strokeLinecap="round"
+                        />
+                        <path
+                            d="M3 15L21 15"
+                            strokeWidth={1.5}
+                            strokeLinecap="round"
+                            className="text-indigo-300/50"
+                        />
+                        <path
+                            d="M4 15C4 15 5 19 12 19C19 19 20 15 20 15"
+                            strokeWidth={1.5}
+                            strokeLinecap="round"
+                            className="text-indigo-300/30"
+                        />
+                    </svg>
+                    <h1 className="text-2xl font-bold text-white">AI Image Generator</h1>
+                </div>
                 <p className="text-gray-400">Transform your ideas into stunning visuals with our advanced AI</p>
             </div>
             <div className="relative group">
@@ -677,15 +710,15 @@ export default function ImageGenerator() {
                                             {image.status === 'pending' && (
                                                 <div className="absolute inset-0 flex flex-col items-center justify-center p-8 bg-gray-800/30">
                                                     <div className="text-center space-y-6 max-w-[300px]">
-                                                        <div className="relative">
-                                                            <Loader2 className="h-10 w-10 animate-spin text-indigo-500" />
+                                                        <div className="relative flex justify-center">
+                                                            <SailboatLoader size="lg" />
                                                             <div className="absolute -bottom-2 -right-2">
                                                                 <div className="animate-pulse w-3 h-3 bg-indigo-500 rounded-full" />
                                                             </div>
                                                         </div>
                                                         <div className="space-y-3">
                                                             <p className="text-base font-medium text-gray-300">
-                                                                {(image.progress ?? 0) >= 100 ? 'Almost there...' : 'Transforming your idea into art...'}
+                                                                {(image.progress ?? 0) >= 100 ? 'Almost there...' : 'Setting sail with your creation...'}
                                                             </p>
                                                             <div className="w-full max-w-[200px] mx-auto">
                                                                 <div className="relative h-2.5 bg-gray-700/50 rounded-full overflow-hidden">
