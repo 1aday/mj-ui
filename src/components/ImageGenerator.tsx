@@ -424,6 +424,10 @@ export default function ImageGenerator() {
 
     return (
         <div className="w-full max-w-4xl mx-auto space-y-8">
+            <div className="text-center space-y-2">
+                <h1 className="text-2xl font-bold text-white">AI Image Generator</h1>
+                <p className="text-gray-400">Transform your ideas into stunning visuals with our advanced AI</p>
+            </div>
             <div className="relative group">
                 <div className="flex flex-col gap-3">
                     <div className="flex gap-3 p-1 bg-gray-900/50 backdrop-blur-xl rounded-2xl border border-gray-800/50 shadow-xl transition-all duration-300 group-hover:border-gray-700/50">
@@ -431,7 +435,7 @@ export default function ImageGenerator() {
                             <input
                                 value={prompt.replace(/\s+--(?:ar|s)\s+[^\s]+/g, '')}
                                 onChange={handlePromptChange}
-                                placeholder="Describe your imagination..."
+                                placeholder="Transform your ideas into stunning visuals..."
                                 className="min-w-0 flex-1 bg-transparent border-0 text-lg text-gray-100 placeholder:text-gray-500/70 focus:ring-0 focus:outline-none font-medium tracking-wide"
                                 disabled={isGenerating}
                                 spellCheck={false}
@@ -681,7 +685,7 @@ export default function ImageGenerator() {
                                                         </div>
                                                         <div className="space-y-3">
                                                             <p className="text-base font-medium text-gray-300">
-                                                                {(image.progress ?? 0) >= 100 ? 'Almost there...' : 'Creating your masterpiece...'}
+                                                                {(image.progress ?? 0) >= 100 ? 'Almost there...' : 'Transforming your idea into art...'}
                                                             </p>
                                                             <div className="w-full max-w-[200px] mx-auto">
                                                                 <div className="relative h-2.5 bg-gray-700/50 rounded-full overflow-hidden">
@@ -705,7 +709,7 @@ export default function ImageGenerator() {
                                                                     )}
                                                                 </div>
                                                                 <p className="text-sm text-gray-400 mt-3 font-medium">
-                                                                    {Math.round(image.progress ?? 0)}% complete
+                                                                    {Math.round(image.progress ?? 0)}% of your creation complete
                                                                 </p>
                                                             </div>
                                                         </div>
@@ -767,7 +771,7 @@ export default function ImageGenerator() {
                                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                                                         </svg>
                                                         <p className="text-sm font-medium text-red-400 mb-2">
-                                                            Generation Failed
+                                                            Generation Failed - Please try again
                                                         </p>
                                                         {image.error && (
                                                             <p className="text-xs text-red-300/80">
